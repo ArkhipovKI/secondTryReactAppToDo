@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import TasksFilter from './tasks-filter'
 
-const Footer = () => {
-	return (
-		<footer className='footer'>
-			<span className="todo-count">1 items left</span>
-			<TasksFilter />
-		</footer>
-	)
+export default class Footer extends Component {
+	static defaultProps = {
+		completedCount: 0,
+		deleteCompleted: () => { },
+		todos: [],
+		handleToggleFilter: () => { },
+		currentStatus: 'all'
+	}
+	render() {
+		const { completedCount, deleteCompleted, todos, handleToggleFilter, currentStatus } = this.props
+
+		return (
+			<footer className='footer'>
+				<span className="todo-count">{completedCount} items left</span>
+				<TasksFilter
+					{...todos}
+					handleToggleFilter={handleToggleFilter}
+					currentStatus={currentStatus}
+					deleteCompleted={deleteCompleted}
+				/>
+			</footer>
+		)
+	}
 }
 
-export default Footer;

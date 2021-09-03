@@ -1,20 +1,29 @@
 import React from 'react';
 import Task from './task';
 
-const NewTaskList = ({ todos, onDeleted, toggleStateOfTask }) => {
+const NewTaskList = ({ todos, currentStatus, successEdit, onDeleted, toggleStateOfTask, onEdited, isEditing }) => {
 	const el = todos.map((item) => (
-		<li key={item.id}>
-			<Task
-				{...item}
-				onDeleted={() => onDeleted(item.id)}
-				toggleStateOfTask={() => toggleStateOfTask (item.id)} />
-		</li>
+		<Task
+			key={item.id}
+			{...item}
+			onEdited={() => onEdited(item.id)}
+			onDeleted={() => onDeleted(item.id)}
+			currentStatus={currentStatus}
+			successEdit={successEdit}
+			toggleStateOfTask={() => toggleStateOfTask(item.id)} />
 	))
 	return (
 		<ul className='todo-list'>
 			{el}
 		</ul>
 	)
+}
+
+NewTaskList.defaultProps = {
+	todos: [],
+	currentStatus: 'all',
+	onDeleted: () => { },
+	toggleStateOfTask: () => { }
 }
 
 export default NewTaskList;

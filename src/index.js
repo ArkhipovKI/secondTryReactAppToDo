@@ -4,7 +4,6 @@ import './index.css';
 import NewTaskForm from './components/new-task-form';
 import NewTaskList from './components/new-task-list';
 import Footer from './components/footer';
-import ItemAddForm from './components/item-add-form';
 
 export default class ToDoApp extends Component {
 
@@ -15,14 +14,35 @@ export default class ToDoApp extends Component {
 			this.createItem('Completed task'),
 			this.createItem('Editing task'),
 			this.createItem('Active task')
-		]
+		],
+		currentStatus: 'all'
 	};
+
+	toggleProperty(arr, id, propName) {
+		const index = arr.findIndex((el) => el.id === id);
+
+		const oldEl = arr[index];
+		const newEl = { ...oldEl, [propName]: !oldEl[propName] }
+
+		return [
+			...arr.slice(0, index),
+			newEl,
+			...arr.slice(index + 1)
+		]
+	}
 
 	createItem(label) {
 		return ({
 			label,
-			complited: false,
-			id: this.maxId++
+			completed: false,
+			id: this.maxId++,
+			isEditing: false
+		})
+	}
+
+	onEdited = (id) => {
+		this.setState(({ toDoData }) => {
+			return { toDoData: this.toggleProperty(toDoData, id, 'isEditing') }
 		})
 	}
 
@@ -41,25 +61,14 @@ export default class ToDoApp extends Component {
 
 	toggleStateOfTask = (id) => {
 		this.setState(({ toDoData }) => {
-
-			const index = toDoData.findIndex((el) => el.id === id);
-
-			const oldEl = toDoData[index];
-			const newEl = { ...oldEl, complited: !oldEl.complited }
-
-			const newArr = [
-				...toDoData.slice(0, index),
-				newEl,
-				...toDoData.slice(index + 1)
-			]
-
-			return { toDoData: newArr };
+			return {
+				toDoData: this.toggleProperty(toDoData, id, 'completed')
+			};
 		})
 	}
 
 	deleteItem = (id) => {
 		this.setState(({ toDoData }) => {
-			console.log(toDoData)
 			const newArr = toDoData.filter((el) => el.id !== id)
 
 			return {
@@ -68,19 +77,63 @@ export default class ToDoApp extends Component {
 		})
 	}
 
+	deleteCompleted = () => {
+		this.setState(({ toDoData }) => {
+			const newArr = toDoData.filter((el) => el.completed !== true)
+			console.log(newArr)
+			return {
+				toDoData: newArr
+			}
+		})
+	}
+
+	handleToggleFilter = (name) => {
+		this.setState({
+			currentStatus: name,
+		})
+	}
+	successEdit = (text, id) => {
+		this.setState(({ toDoData }) => {
+			const newState = toDoData.map((el) => {
+				if (id === el.id) {
+					el.label = text;
+					el.isEditing = !el.isEditing;
+				}
+				return el;
+			})
+
+			return {
+				toDoData: newState
+			}
+		})
+	}
 	render() {
+		console.log(this.state)
+		const { currentStatus, toDoData } = this.state
+
+		const completedCount = toDoData.filter((el) => el.completed === false).length
+
 		return (
 			<section className='todoapp' >
 				<header>
 					<h1>todos</h1>
-					<NewTaskForm />
+					<NewTaskForm AddItem={this.addNewItem} />
 				</header>
 				<section className='main'>
-					<NewTaskList todos={this.state.toDoData}
+					<NewTaskList
+						todos={toDoData}
+						currentStatus={currentStatus}
+						onEdited={this.onEdited}
 						onDeleted={this.deleteItem}
-						toggleStateOfTask={this.toggleStateOfTask} />
-					<ItemAddForm AddItem={() => this.addNewItem('Hello world')} />
-					<Footer />
+						toggleStateOfTask={this.toggleStateOfTask}
+						successEdit={this.successEdit} />
+					<Footer
+						completedCount={completedCount}
+						currentStatus={currentStatus}
+						todos={toDoData}
+						deleteCompleted={this.deleteCompleted}
+						handleToggleFilter={this.handleToggleFilter}
+					/>
 				</section>
 			</section>
 		);

@@ -40,6 +40,17 @@ body {
 :focus {
 	outline: 0;
 }
+.btn {
+	flex-basis: 20%;
+}
+
+.form-input {
+	display: flex;
+}
+
+.new-todo {
+	flex-basis: 80%;
+}
 
 .button-add {
 	margin-top: 5px;
@@ -294,7 +305,6 @@ body {
 	justify-content: space-between;
 	align-items: center;
 	padding: 10px 15px;
-	height: 20px;
 	text-align: center;
 	font-size: 15px;
 	border-top: 1px solid #e6e6e6;
