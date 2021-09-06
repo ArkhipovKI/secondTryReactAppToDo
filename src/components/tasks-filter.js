@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class TasksFilter extends Component {
 
@@ -6,6 +7,12 @@ export default class TasksFilter extends Component {
 		currentStatus: 'all',
 		deleteCompleted: () => { },
 		handleToggleFilter: () => { }
+	}
+
+	static propTypes = {
+		currentStatus: PropTypes.string,
+		deleteCompleted: PropTypes.func,
+		handleToggleFilter: PropTypes.func
 	}
 
 	render() {

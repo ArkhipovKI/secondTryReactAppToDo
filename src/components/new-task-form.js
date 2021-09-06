@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-export default class NewTaskForm extends Component {
-	static defaultProps = {
 
-	}
+export default class NewTaskForm extends Component {
 	state = {
 		label: ''
 	}

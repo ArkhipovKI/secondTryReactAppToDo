@@ -1,7 +1,8 @@
 import React from 'react';
 import Task from './task';
+import PropTypes from 'prop-types';
 
-const NewTaskList = ({ todos, currentStatus, successEdit, onDeleted, toggleStateOfTask, onEdited, isEditing }) => {
+const NewTaskList = ({ todos, currentStatus, successEdit, onDeleted, toggleStateOfTask, onEdited }) => {
 	const el = todos.map((item) => (
 		<Task
 			key={item.id}
@@ -21,9 +22,27 @@ const NewTaskList = ({ todos, currentStatus, successEdit, onDeleted, toggleState
 
 NewTaskList.defaultProps = {
 	todos: [],
+	item: {},
 	currentStatus: 'all',
+	toggleStateOfTask: () => { },
+	successEdit: () => { },
 	onDeleted: () => { },
-	toggleStateOfTask: () => { }
+	onEdited: () => { }
+}
+
+NewTaskList.propTypes = {
+	item: PropTypes.shape({
+		label: PropTypes.string,
+		completed: PropTypes.bool,
+		id: PropTypes.number,
+		isEditing: PropTypes.bool,
+	}),
+	todos: PropTypes.arrayOf(PropTypes.object),
+	currentStatus: PropTypes.string,
+	onDeleted: PropTypes.func,
+	onEdited: PropTypes.func,
+	toggleStateOfTask: PropTypes.func,
+	successEdit: PropTypes.func
 }
 
 export default NewTaskList;

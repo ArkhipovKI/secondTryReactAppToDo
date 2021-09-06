@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TasksFilter from './tasks-filter'
+import PropTypes from 'prop-types';
 
 export default class Footer extends Component {
 	static defaultProps = {
@@ -9,6 +10,14 @@ export default class Footer extends Component {
 		handleToggleFilter: () => { },
 		currentStatus: 'all'
 	}
+
+	static propTypes = {
+		deleteCompleted: PropTypes.func,
+		todos: PropTypes.arrayOf(PropTypes.object),
+		handleToggleFilter: PropTypes.func,
+		currentStatus: PropTypes.string
+	}
+
 	render() {
 		const { completedCount, deleteCompleted, todos, handleToggleFilter, currentStatus } = this.props
 

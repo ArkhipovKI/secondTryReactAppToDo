@@ -5,6 +5,7 @@ import NewTaskForm from './components/new-task-form';
 import NewTaskList from './components/new-task-list';
 import Footer from './components/footer';
 
+
 export default class ToDoApp extends Component {
 
 	maxId = 1;
@@ -36,7 +37,8 @@ export default class ToDoApp extends Component {
 			label,
 			completed: false,
 			id: this.maxId++,
-			isEditing: false
+			isEditing: false,
+			created: Date.now()
 		})
 	}
 
