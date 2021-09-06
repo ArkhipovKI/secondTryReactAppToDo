@@ -55,6 +55,9 @@ export default class Task extends Component {
 		}
 		if (event.key === 'Escape') {
 			successEdit(oldValue, id)
+			this.setState({
+				newText: oldValue
+			})
 		}
 	}
 
