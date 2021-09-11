@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
-
+import './task.css'
+import cn from 'classnames'
 
 export default class Task extends Component {
 	static defaultProps = {
@@ -15,6 +16,7 @@ export default class Task extends Component {
 		onDeleted: () => { },
 		onEdited: () => { },
 		toggleStateOfTask: () => { },
+		successEdit: () => { },
 	}
 
 	static propTypes = {
@@ -29,6 +31,7 @@ export default class Task extends Component {
 		onChange: PropTypes.func,
 		currentStatus: PropTypes.string
 	}
+
 	state = {
 		newText: this.props.label,
 		oldValue: this.props.label
@@ -41,6 +44,12 @@ export default class Task extends Component {
 		});
 	};
 
+	handleOnBlur = (event) => {
+		console.log(event)
+		const { successEdit, id } = this.props
+		successEdit(this.state.newText !== '' ? this.state.newText : 'Введите задачу', id)
+	}
+
 	handleKeyDown = (event) => {
 		const { newText, oldValue } = this.state;
 		const { successEdit, id, onDeleted } = this.props;
@@ -48,10 +57,12 @@ export default class Task extends Component {
 			if (newText === '') {
 				onDeleted(id)
 			}
+			event.preventDefault()
 			successEdit(newText, id)
 			this.setState({
 				oldValue: newText
 			})
+			event.target.focus()
 		}
 		if (event.key === 'Escape') {
 			successEdit(oldValue, id)
@@ -62,21 +73,26 @@ export default class Task extends Component {
 	}
 
 	render() {
-
 		let { newText } = this.state;
 		const { label, onDeleted, isEditing, completed, toggleStateOfTask, onEdited, currentStatus, created } = this.props;
 
-		let className = !completed ? '' : 'completed';
-		className += `${currentStatus === 'active' && completed ? ' hidden' : ''}`
-		className += `${currentStatus === 'completed' && !completed ? ' hidden' : ''}`
-		className += `${isEditing ? ' editing' : ''}`
+		//let className = !completed ? '' : 'completed';
+		let className = cn({
+			'editing': isEditing,
+			'completed': completed,
+			'hidden': (completed && currentStatus === 'active') ||
+				(currentStatus === 'completed' && !completed)
+		})
+		//className += `${currentStatus === 'active' && completed ? ' hidden' : ''}`
+		//className += `${currentStatus === 'completed' && !completed ? ' hidden' : ''}`
+		//className += `${isEditing ? ' editing' : ''}`
 
 		let view = 'view';
 
 		return (
 			<li className={className}>
 				<div className={view}>
-					<input className="toggle" type="checkbox" onClick={toggleStateOfTask} />
+					<input className="toggle" type="checkbox" readOnly checked={completed} onClick={toggleStateOfTask} />
 					<label>
 						<span className='description'>{label}</span>
 						<span className="created">created {formatDistanceToNow(created, { includeSeconds: true })} ago</span>
@@ -89,11 +105,12 @@ export default class Task extends Component {
 					type="text"
 					className="edit"
 					value={newText}
-					onKeyDown={this.handleKeyDown}
+					onKeyUp={this.handleKeyDown}
 					onChange={this.handleInputChange}
 					ref={input => input && input.focus()}
+					onBlur={this.handleOnBlur}
 				/>
-			</li>
+			</li >
 		)
 	}
 }

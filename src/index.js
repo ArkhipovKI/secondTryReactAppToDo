@@ -4,11 +4,9 @@ import './index.css';
 import NewTaskForm from './components/new-task-form';
 import NewTaskList from './components/new-task-list';
 import Footer from './components/footer';
-
+import './removeDefaultStyles.css';
 
 export default class ToDoApp extends Component {
-
-	maxId = 1;
 
 	state = {
 		toDoData: [
@@ -18,6 +16,22 @@ export default class ToDoApp extends Component {
 		],
 		currentStatus: 'all'
 	};
+
+	componentDidUpdate() {
+		localStorage.setItem('dataState', JSON.stringify(this.state.toDoData));
+		localStorage.setItem('dataStatus', JSON.stringify(this.state.currentStatus));
+	}
+
+	componentDidMount() {
+		const dataState = JSON.parse(localStorage.getItem('dataState'))
+		const dataStatus = JSON.parse(localStorage.getItem('dataStatus'))
+		if (dataState !== null || dataStatus !== null) {
+			this.setState({
+				toDoData: dataState,
+				currentStatus: dataStatus
+			})
+		}
+	}
 
 	toggleProperty(arr, id, propName) {
 		const index = arr.findIndex((el) => el.id === id);
@@ -34,9 +48,9 @@ export default class ToDoApp extends Component {
 
 	createItem(label) {
 		return ({
-			label,
+			label: label,
 			completed: false,
-			id: this.maxId++,
+			id: Math.random() * 10000,
 			isEditing: false,
 			created: Date.now()
 		})
@@ -59,6 +73,8 @@ export default class ToDoApp extends Component {
 			}
 
 		})
+
+
 	}
 
 	toggleStateOfTask = (id) => {
@@ -87,6 +103,7 @@ export default class ToDoApp extends Component {
 				toDoData: newArr
 			}
 		})
+
 	}
 
 	handleToggleFilter = (name) => {
@@ -94,12 +111,13 @@ export default class ToDoApp extends Component {
 			currentStatus: name,
 		})
 	}
+
 	successEdit = (text, id) => {
 		this.setState(({ toDoData }) => {
 			const newState = toDoData.map((el) => {
 				if (id === el.id) {
 					el.label = text;
-					el.isEditing = !el.isEditing;
+					el.isEditing = el.isEditing === true ? !el.isEditing : el.isEditing
 				}
 				return el;
 			})

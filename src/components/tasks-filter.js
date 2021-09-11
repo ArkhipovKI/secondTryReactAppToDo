@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import './tasks-filter.css'
+import PropTypes from 'prop-types'
 
 export default class TasksFilter extends Component {
 

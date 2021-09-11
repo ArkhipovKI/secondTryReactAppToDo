@@ -1,6 +1,7 @@
 import React from 'react';
 import Task from './task';
 import PropTypes from 'prop-types';
+import './new-task-list.css'
 
 const NewTaskList = ({ todos, currentStatus, successEdit, onDeleted, toggleStateOfTask, onEdited }) => {
 	const el = todos.map((item) => (

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import './new-task-form.css'
 
 export default class NewTaskForm extends Component {
 	state = {
@@ -7,9 +7,12 @@ export default class NewTaskForm extends Component {
 	}
 
 	onLabelChange = (event) => {
-		this.setState({
-			label: event.target.value
-		})
+		const value = event.target.value
+
+		if (value !== ' ') {
+			this.setState({ label: value })
+
+		}
 	}
 
 	onSubmit = (event) => {
