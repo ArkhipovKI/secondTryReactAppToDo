@@ -117,7 +117,7 @@ export default class ToDoApp extends Component {
 			const newState = toDoData.map((el) => {
 				if (id === el.id) {
 					el.label = text;
-					el.isEditing = el.isEditing === true ? !el.isEditing : el.isEditing
+					el.isEditing = false
 				}
 				return el;
 			})

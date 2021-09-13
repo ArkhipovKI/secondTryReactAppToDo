@@ -76,16 +76,12 @@ export default class Task extends Component {
 		let { newText } = this.state;
 		const { label, onDeleted, isEditing, completed, toggleStateOfTask, onEdited, currentStatus, created } = this.props;
 
-		//let className = !completed ? '' : 'completed';
 		let className = cn({
 			'editing': isEditing,
 			'completed': completed,
 			'hidden': (completed && currentStatus === 'active') ||
 				(currentStatus === 'completed' && !completed)
 		})
-		//className += `${currentStatus === 'active' && completed ? ' hidden' : ''}`
-		//className += `${currentStatus === 'completed' && !completed ? ' hidden' : ''}`
-		//className += `${isEditing ? ' editing' : ''}`
 
 		let view = 'view';
 
